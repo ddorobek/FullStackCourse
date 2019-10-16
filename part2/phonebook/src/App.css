@@ -20,3 +20,14 @@
 .App-link {
   color: #09d3ac;
 }
+
+.error {
+  color: green;
+  display: block;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

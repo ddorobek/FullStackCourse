@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import phonebookService from './services/phonebook'
 
 const PersonForm = (props) => {
 
@@ -20,10 +21,31 @@ const PersonForm = (props) => {
             name: newName, 
             number: newNumber 
           }
+          phonebookService.create(personObj)
           props.setPersons(props.persons.concat(personObj))
+          props.setErrorMessage(`Added ${personObj.name}`)
+          setTimeout(() => props.setErrorMessage(''), 2000)
         }
         else {
-          window.alert(`${newName} is already added to phonebook`)
+          if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+            phonebookService.getAll().then(
+              phonebook => {
+                phonebook.forEach(person => {
+                  if(person.name === newName) {
+                    const personObj = {
+                      name: newName,
+                      number: newNumber,
+                      id: person.id
+                    }
+                    phonebookService.update(personObj)
+                    props.setErrorMessage(`${personObj.name}'s new phone number: ${personObj.number}`)
+                    setTimeout(() => window.location.reload(), 2000)
+                    
+                  }
+                });
+              }
+            )
+          }
         }
         setNewName('')
         setNewNumber('')
